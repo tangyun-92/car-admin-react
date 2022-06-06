@@ -20,12 +20,12 @@ declare namespace API {
   type LoginResult = {
     code?: number;
     message?: string;
-    data?: LoginResultData
+    data?: LoginResultData;
   };
 
   type LoginResultData = {
     username?: string;
-    token?: string
+    token?: string;
   }
 
   type PageParams = {

@@ -38,10 +38,23 @@
     ],
   },
   {
-    path: '/role',
-    name: 'role',
+    path: '/system',
+    name: 'system',
     icon: 'smile',
-    component: './Role',
+    routes: [
+      {
+        path: '/system/user-management',
+        name: 'user-management',
+        icon: 'smile',
+        component: './system/user-management',
+      },
+      {
+        path: '/system/role-management',
+        name: 'role-management',
+        icon: 'smile',
+        component: './system/role-management',
+      }
+    ]
   },
   {
     name: 'list.table-list',
