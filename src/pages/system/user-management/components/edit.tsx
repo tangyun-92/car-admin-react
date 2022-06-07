@@ -11,13 +11,13 @@ export type UserFormProps = {
   onSubmit: (values: UserFormValueType) => Promise<void>;
   visible: boolean;
   values: Partial<UserType>;
-  // statusOptions: any;
+  statusOptions: any;
 }
 
 const UserForm: React.FC<UserFormProps> = (props) => {
   const [form] = Form.useForm()
 
-  // const {  } = props
+  const { statusOptions } = props
   useEffect(() => {
     form.resetFields()
     form.setFieldsValue({
@@ -149,6 +149,24 @@ const UserForm: React.FC<UserFormProps> = (props) => {
                 {
                   required: false,
                   message: <FormattedMessage id="请选择性别" defaultMessage="请选择性别" />
+                }
+              ]}
+            />
+          </Col>
+        </Row>
+        <Row gutter={[16, 16]}>
+          <Col span={24} order={1}>
+            <ProFormRadio.Group
+              valueEnum={statusOptions}
+              name="status"
+              label="状态"
+              width="xl"
+              {...formItemLayout}
+              placeholder="请选择状态"
+              rules={[
+                {
+                  required: false,
+                  message: <FormattedMessage id="请选择状态" defaultMessage="请选择状态" />
                 }
               ]}
             />

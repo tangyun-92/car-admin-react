@@ -21,13 +21,13 @@ const handleRemove = async (row: UserType) => {
   try {
     const res = await delUser(row.id)
     hide()
-    console.log(res)
     if (res.code === 0) {
       message.success('删除成功，即将刷新')
+      return true
     } else {
       message.error(res.message)
+      return false
     }
-    return true
   } catch (e) {
     hide()
     message.error('删除失败，请重试')
@@ -46,10 +46,11 @@ const handleCreate = async (fields: UserType) => {
     hide()
     if (res.code === 0) {
       message.success('添加成功')
+      return true
     } else {
       message.error(res.message)
+      return false
     }
-    return true
   } catch (e) {
     hide()
     message.error('添加失败请重试')
@@ -68,10 +69,11 @@ const handleUpdate = async (fields: UserType) => {
     hide()
     if (res.code === 0) {
       message.success('更新成功')
+      return true
     } else {
       message.error(res.message)
+      return false
     }
-    return true
   } catch (e) {
     hide()
     message.error('更新失败请重试')
@@ -247,6 +249,7 @@ const User: React.FC = () => {
         }}
         visible={modalVisible}
         values={currentRow || {}}
+        statusOptions={frozenOption}
       />
     </PageHeaderWrapper>
   )
