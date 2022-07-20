@@ -1,26 +1,26 @@
 import React, {useRef, useState} from 'react'
 import {ActionType, ProColumns, ProTable} from '@ant-design/pro-table'
-import { UserType } from '@/pages/system/user-management/data'
+import { CarBrandType } from './data'
 import {Button, FormInstance, message, Modal, Tag} from 'antd'
 import {
-  createUser,
-  delUser,
-  getUserList,
-  updateUser
-} from '@/services/system/user-management'
+  getCarBrandList,
+  createCarBrand,
+  updateCarBrand,
+  delCarBrand
+} from '@/services/system/brand-management'
 import {PageHeaderWrapper} from '@ant-design/pro-layout'
 import UpdateForm from './components/edit'
-import {frozenOption} from '@/constant'
+import {brandTypeOption, statusOption} from '@/constant'
 
 /**
  * 删除用户
  * @param row 选中行数据
  */
-const handleRemove = async (row: UserType) => {
+const handleRemove = async (row: CarBrandType) => {
   const hide = message.loading('正在删除')
   if (!row.id) return true
   try {
-    const res = await delUser(row.id)
+    const res = await delCarBrand(row.id)
     hide()
     if (res.code === 0) {
       message.success('删除成功，即将刷新')
@@ -40,10 +40,10 @@ const handleRemove = async (row: UserType) => {
  * 添加用户
  * @param fields
  */
-const handleCreate = async (fields: UserType) => {
+const handleCreate = async (fields: CarBrandType) => {
   const hide = message.loading('正在添加')
   try {
-    const res = await createUser({...fields})
+    const res = await createCarBrand({...fields})
     hide()
     if (res.code === 0) {
       message.success('添加成功')
@@ -63,10 +63,10 @@ const handleCreate = async (fields: UserType) => {
  * 更新用户
  * @param fields
  */
-const handleUpdate = async (fields: UserType) => {
+const handleUpdate = async (fields: CarBrandType) => {
   const hide = message.loading('正在更新')
   try {
-    const res = await updateUser({...fields})
+    const res = await updateCarBrand({...fields})
     hide()
     if (res.code === 0) {
       message.success('更新成功')
@@ -82,53 +82,65 @@ const handleUpdate = async (fields: UserType) => {
   }
 }
 
-const User: React.FC = () => {
+const CarBrand: React.FC = () => {
   const actionRef = useRef<ActionType>()
   const formTableRef = useRef<FormInstance>()
 
   const [modalVisible, setModalVisible] = useState<boolean>(false) // 弹窗状态
-  const [currentRow, setCurrentRow] = useState<UserType>() // 当前点击行数据
+  const [currentRow, setCurrentRow] = useState<CarBrandType>() // 当前点击行数据
 
-  const columns: ProColumns<UserType>[] = [
+  const columns: ProColumns<CarBrandType>[] = [
     {
-      title: '用户名',
-      dataIndex: 'username',
+      title: '中文名称',
+      dataIndex: 'cName',
       valueType: 'text'
     },
     {
-      title: '手机号',
-      dataIndex: 'phoneNumber',
-      valueType: 'text'
-    },
-    {
-      title: '昵称',
-      dataIndex: 'nickName',
+      title: '英文名称',
+      dataIndex: 'eName',
       valueType: 'text',
       hideInSearch: true
     },
     {
-      title: '性别',
-      dataIndex: 'gender',
-      hideInSearch: true,
-      render: (_, { gender }) => (
+      title: '显示顺序',
+      dataIndex: 'sort',
+      valueType: 'text',
+      hideInSearch: true
+    },
+    {
+      title: '国家',
+      dataIndex: 'country',
+      valueType: 'text',
+      hideInSearch: true
+    },
+    {
+      title: '品牌类型',
+      dataIndex: 'brandType',
+      valueType: 'text',
+      valueEnum: brandTypeOption
+    },
+    {
+      title: '品牌创建时间',
+      dataIndex: 'brandCreateTime',
+      valueType: 'text',
+      hideInSearch: true
+    },
+    {
+      title: '是否热门',
+      dataIndex: 'isHot',
+      render: (_, { isHot }) => (
         <>
-          <Tag color={gender === '0' ? 'gold' : gender === '1' ? 'blue' : 'purple'}>
-            {gender === '0' ? '保密' : gender === '1' ? '男' : '女'}
+          <Tag color={isHot === '1' ? 'error' : 'default'}>
+            {isHot === '1' ? '是' : '否'}
           </Tag>
         </>
       )
     },
     {
-      title: '最后一次登录时间',
-      dataIndex: 'latestLoginAt',
-      valueType: 'text',
-      hideInSearch: true
-    },
-    {
       title: '状态',
       dataIndex: 'status',
       valueType: 'select',
-      valueEnum: frozenOption
+      valueEnum: statusOption
     },
     {
       title: '操作',
@@ -178,7 +190,7 @@ const User: React.FC = () => {
   return (
     <PageHeaderWrapper>
       <div style={{width: '100%', float: 'right'}}>
-        <ProTable<UserType>
+        <ProTable<CarBrandType>
           headerTitle="信息"
           actionRef={actionRef}
           formRef={formTableRef}
@@ -199,7 +211,7 @@ const User: React.FC = () => {
             </Button>
           ]}
           request={(params) =>
-            getUserList({...params}).then(res => {
+            getCarBrandList({...params}).then(res => {
               return {
                 data: res.data.list,
                 total: res.data.count,
@@ -220,9 +232,9 @@ const User: React.FC = () => {
         onSubmit={async (values) => {
           let res = false
           if (values.id) {
-            res = await handleUpdate({...values} as UserType)
+            res = await handleUpdate({...values} as CarBrandType)
           } else {
-            res = await handleCreate({...values} as UserType)
+            res = await handleCreate({...values} as CarBrandType)
           }
           if (res) {
             setModalVisible(false)
@@ -238,10 +250,9 @@ const User: React.FC = () => {
         }}
         visible={modalVisible}
         values={currentRow || {}}
-        statusOptions={frozenOption}
       />
     </PageHeaderWrapper>
   )
 }
 
-export default User
+export default CarBrand

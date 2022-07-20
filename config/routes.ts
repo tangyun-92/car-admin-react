@@ -53,6 +53,12 @@
         name: 'role-management',
         icon: 'smile',
         component: './system/role-management',
+      },
+      {
+        path: '/system/brand-management',
+        name: 'brand-management',
+        icon: 'smile',
+        component: './system/brand-management',
       }
     ]
   },

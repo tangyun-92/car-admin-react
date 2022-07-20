@@ -7,6 +7,7 @@ export default {
   'menu.system': '系统管理',
   'menu.system.user-management': '用户管理',
   'menu.system.role-management': '角色管理',
+  'menu.system.brand-management': '品牌管理',
   'menu.login': '登录',
   'menu.register': '注册',
   'menu.register-result': '注册结果',
